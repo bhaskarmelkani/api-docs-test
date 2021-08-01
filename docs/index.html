@@ -142,6 +142,7 @@
   <script>
     $("body").on("click", ".apilinks", function (e) {
       e.preventDefault();
+      e.stopPropagation();
       var query = $(e.currentTarget).data('api');
       window.location.search = query;
     });

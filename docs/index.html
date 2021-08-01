@@ -141,6 +141,7 @@
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script>
     $("body").on("click", ".apilinks", function (e) {
+      e.preventDefault();
       var query = $(e.currentTarget).data('api');
       window.location.search = query;
     });

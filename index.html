@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3.23.4/swagger-ui.css">
+  <script src="https://unpkg.com/swagger-ui-dist@3.23.4/swagger-ui-standalone-preset.js"> </script>
+  <script src="https://unpkg.com/swagger-ui-dist@3.23.4/swagger-ui-bundle.js"> </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+    integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  <style>
+    html {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin: 0;
+      background: #fafafa;
+    }
+
+    .information-container.wrapper {
+      padding: 0;
+    }
+
+    .wrapper pre {
+      background-color: rgba(0, 0, 0, 0);
+    }
+
+    .markdown-section .wrapper code,
+    .markdown-section .wrapper pre {
+      background-color: #0000 !important;
+    }
+
+    .markdown-section .wrapper td,
+    .markdown-section .wrapper th,
+    .markdown-section .wrapper tr {
+      border: none !important;
+    }
+
+    .markdown-section .wrapper p.tip,
+    .markdown-section .wrapper tr:nth-child(2n) {
+      background-color: inherit;
+    }
+
+    .markdown-section .wrapper .model-example pre {
+      background-color: rgb(51, 51, 51) !important;
+    }
+
+    .wrapper .info h2 {
+      margin-bottom: 10px !important;
+    }
+
+    .wrapper .info pre {
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a href="#/">EN</a>
+    <a href="#/zh-cn/">中文</a>
+  </nav>
+  <div id="app">Please wait...</div>
+  <script>
+    window.$docsify = {
+      name: '',
+      hideSidebar: true,
+      repo: '',
+      routerMode: 'history',
+      basePath: 'http://localhost:3000/',
+      plugins: [
+        function (hook, vm) {
+          hook.init(function () {
+            console.log("|HOOK| Init");
+            // Called when the script starts running, only trigger once, no arguments,
+          });
+
+          hook.beforeEach(function (content) {
+            console.log("|HOOK| BeforeEach");
+            // Invoked each time before parsing the Markdown file.
+            // ...
+            return content;
+          });
+
+          hook.afterEach(function (html, next) {
+            console.log("|HOOK| AfterEach");
+            // Invoked each time after the Markdown file is parsed.
+            // beforeEach and afterEach support asynchronous。
+            // ...
+            // call `next(html)` when task is done.
+            next(html)
+          });
+
+          hook.doneEach(function () {
+            console.log("|HOOK| DonEach");
+            var api = vm.route.query.api;
+            if (api) {
+              const ui = SwaggerUIBundle({
+                url: "./specs/" + api,
+                domNode: document.querySelector("#main"),
+                deepLinking: true,
+                presets: [
+                  SwaggerUIBundle.presets.apis,
+                  SwaggerUIStandalonePreset
+                ],
+                layout: "BaseLayout"
+              })
+            }
+            // Invoked each time after the data is fully loaded, no arguments,
+            // ...
+          });
+
+          hook.mounted(function () {
+            console.log("|HOOK| Mounted");
+            // Called after initial completion. Only trigger once, no arguments.
+          });
+
+          hook.ready(function () {
+            console.log("|HOOK| Ready");
+            // Called after initial completion, no arguments.
+          });
+        }
+      ]
+    }
+  </script>
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script>
+    $("body").on("click", ".apilinks", function (e) {
+      var query = $(e.currentTarget).data('api');
+      window.location.search = query;
+    });
+
+  </script>
+</body>
+
+</html>
